@@ -3,6 +3,10 @@
         "phpunit/phpunit": "^9.1"
     },
     "require": {
-        "guzzlehttp/guzzle": "~6.0"
+        "guzzlehttp/guzzle": "~6.0",
+        "spatie/array-to-xml": "^2.11"
+    },
+    "config": {
+        "secure-http": false
     }
 }
