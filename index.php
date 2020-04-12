@@ -76,11 +76,13 @@ function setHeadersAndShowResponse($data = []){
 		echo ArrayToXml::convert($data, 'root');
 	}
 	else if (endsWith($uri, "logs") ){
+		ini_set('default_charset', NULL);
 		http_response_code($responseCode);
 		header("Content-Type: text/plain");
 		echo file_get_contents("requests.file");
 	}
 	else if (endsWith($uri, "slog")){
+		ini_set('default_charset', NULL);
 		http_response_code($responseCode);
 		header("Content-Type: text/plain");
 		echo file_get_contents("r.file");
