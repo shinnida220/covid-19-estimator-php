@@ -11,7 +11,8 @@ $eta = -hrtime(true);
 // Remove trailing slashe
 $uri = rtrim($_SERVER['REQUEST_URI'], '/');
 
-$responseCode = (in_array($uri, [
+$responseCode = (!in_array($uri, [
+	'/xml', '/logs', '/slog', 'json'
 	'/api/v1/on-covid-19/xml',
 	'/api/v1/on-covid-19/logs',
 	'/api/v1/on-covid-19',
@@ -59,25 +60,31 @@ function setHeadersAndShowResponse($data = []){
 	global $responseCode;
 	global $uri;
 	// Remove trailing slashe
-	$uri = rtrim($_SERVER['REQUEST_URI'], '/');
+	// $uri = rtrim($_SERVER['REQUEST_URI'], '/');
+	$uri = $_SERVER['REQUEST_URI'];
 
 	// Proceed to set the necessary headers..
 	switch($uri){
+		case '/xml':
 		case '/api/v1/on-covid-19/xml':
 			http_response_code($responseCode);
 			header ("Content-Type: application/xml");
 			echo ArrayToXml::convert($data, 'root');
 		break;
+		case '/logs':
 		case '/api/v1/on-covid-19/logs':
 			http_response_code($responseCode);
 			header("Content-Type: text/plain");
 			echo file_get_contents("requests.file");
 		break;
+		case '/slog':
 		case '/api/v1/on-covid-19/slog':
 			http_response_code($responseCode);
 			header("Content-Type: text/plain");
 			echo file_get_contents("r.file");
 		break;
+		case '/json':
+		case '/':
 		case '/api/v1/on-covid-19':
 		case '/api/v1/on-covid-19/json':
 			http_response_code($responseCode);
