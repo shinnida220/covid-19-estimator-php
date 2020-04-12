@@ -25,7 +25,7 @@ $responseCode = 200;
 
 $data = ['status' => 'NOT FOUND 404', 'code' => 404];
 if ($_SERVER['REQUEST_METHOD'] == "POST" &&  
-		( endsWith($uri, "json") || endsWith($uri, "xml") || endsWith($uri, "/") || $uri == "/" ) 
+		( endsWith($uri, "json") || endsWith($uri, "xml") || endsWith($uri, "/") || $uri == "/api/v1/on-covid-19" ) 
 	) {
 
 	// Read the input stream
@@ -57,7 +57,7 @@ function logOperation(){
 	global $eta;
 	global $responseCode;
 
-	$requestString = $_SERVER['REQUEST_METHOD'] ."\t\t" . $_SERVER['REQUEST_URI'] ."\t\t". $responseCode. "\t\t".$eta." ms\r\n";
+	$requestString = $_SERVER['REQUEST_METHOD'] ."\t" . $_SERVER['REQUEST_URI'] ."\t". $responseCode. "\t".$eta."ms\r\n";
 	file_put_contents("requests.file", $requestString, FILE_APPEND | LOCK_EX);
 }
 
@@ -77,7 +77,7 @@ function setHeadersAndShowResponse($data = []){
 	}
 	else if (endsWith($uri, "logs") ){
 		http_response_code($responseCode);
-		header("Content-Type: text/html;");
+		header("Content-Type: text/plain");
 		echo file_get_contents("requests.file");
 	}
 	else if (endsWith($uri, "slog")){
