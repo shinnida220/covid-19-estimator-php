@@ -9,10 +9,11 @@ ini_set('serialize_precision','-1');
 $eta = -hrtime(true);
 
 // Remove trailing slashe
-$uri = rtrim($_SERVER['REQUEST_URI'], '/');
+// $uri = rtrim($_SERVER['REQUEST_URI'], '/');
+$uri = $_SERVER['REQUEST_URI'];
 
-$responseCode = (!in_array($uri, [
-	'/xml', '/logs', '/slog', 'json'
+$responseCode = (in_array($uri, [
+	'/xml', '/logs', '/slog', 'json', '/',
 	'/api/v1/on-covid-19/xml',
 	'/api/v1/on-covid-19/logs',
 	'/api/v1/on-covid-19',
