@@ -62,7 +62,8 @@ function setHeadersAndShowResponse($data = []){
 	global $uri;
 	// Remove trailing slashe
 	// $uri = rtrim($_SERVER['REQUEST_URI'], '/');
-	$uri = $_SERVER['REQUEST_URI'];
+	$data['uri'] = $uri;
+	$data['responseCode'] = $responseCode;
 
 	// Proceed to set the necessary headers..
 	switch($uri){
@@ -88,12 +89,12 @@ function setHeadersAndShowResponse($data = []){
 		case '/':
 		case '/api/v1/on-covid-19':
 		case '/api/v1/on-covid-19/json':
-			http_response_code($responseCode);
-			header('Content-Type: application/json; charset=utf-8');
-			echo json_encode($data);
-		break;
+		// 	http_response_code($responseCode);
+		// 	header('Content-Type: application/json; charset=utf-8');
+		// 	echo json_encode($data);
+		// break;
 		default:
-			http_response_code(404);
+			http_response_code($responseCode);
 			header('Content-Type: application/json; charset=utf-8');
 			echo json_encode($data);
 	}
