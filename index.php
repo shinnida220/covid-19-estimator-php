@@ -3,6 +3,9 @@ require __DIR__ . '/src/estimator.php';
 require __DIR__ . '/vendor/autoload.php';
 use Spatie\ArrayToXml\ArrayToXml;
 
+// Json decimal precision hack.. - https://stackoverflow.com/a/41827056/380138
+ini_set('serialize_precision','-1');
+
 $eta = -hrtime(true);
 
 // Remove trailing slashe
