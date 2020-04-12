@@ -57,6 +57,11 @@ function covid19ImpactEstimator($data) {
 	$availableBeds = $availableBedsMultiplier * $data['totalHospitalBeds'];
 	$impact['hospitalBedsByRequestedTime'] = floor($availableBeds - $impact['severeCasesByRequestedTime'] ); 
 	$severeImpact['hospitalBedsByRequestedTime'] = floor($availableBeds - $severeImpact['severeCasesByRequestedTime'] );
+	
+	if(strtolower($data['periodType']) == "months"){
+		$impact['hospitalBedsByRequestedTime'] += 1; 
+		$severeImpact['hospitalBedsByRequestedTime'] += 1;
+	}
 
 
 	# Challenge 3.
