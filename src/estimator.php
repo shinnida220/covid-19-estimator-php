@@ -27,34 +27,34 @@ function covid19ImpactEstimator($data) {
 	$timeElapse = 0;
 	switch (strtolower($data['periodType'])){
 		case 'days':
-			$timeElapse = $data['timeToElapse'];
+			$timeElapse = floor($data['timeToElapse']/3);
 		break;
 		case 'weeks':
-			$timeElapse = $data['timeToElapse'] * 7;
+			$timeElapse = floor( ($data['timeToElapse'] * 7) /3 );
 		break;
 		case 'months':
-			$timeElapse = $data['timeToElapse'] * 30;
+			$timeElapse = floor ( ($data['timeToElapse'] * 30) /3 );
 		break;
 		default:
-			$timeElapse = $data['timeToElapse'];
+			$timeElapse = floor ($data['timeToElapse']/3);
 	}
 
 	# Challenge 1.
 	$impact = [];
 	$severeImpact = [];
 
-	$impact['currentlyInfected'] = floor($data['reportedCases'] * 10);
-	$severeImpact['currentlyInfected'] = floor($impact['currentlyInfected'] * 50 );	
+	$impact['currentlyInfected'] = floor($data['reportedCases'] * $reportedCasesMultiplier);
+	$severeImpact['currentlyInfected'] = floor($data['reportedCases'] * $severeCasesMultiplier );	
 
-	$impact['infectionsByRequestedTime'] = floor($impact['currentlyInfected'] * (2 ** ($timeElapse/3) ) );
-	$severeImpact['infectionsByRequestedTime'] = floor($severeImpact['currentlyInfected'] * (2 ** ($timeElapse/3) ) );
+	$impact['infectionsByRequestedTime'] = floor($impact['currentlyInfected'] * (2 ** $timeElapse) );
+	$severeImpact['infectionsByRequestedTime'] = floor($severeImpact['currentlyInfected'] * (2 ** $timeElapse) );
 
 
 	# Challenge 2.
 	$impact['severeCasesByRequestedTime'] = floor($severCasesByTimeMultiplier * $impact['infectionsByRequestedTime'] );
 	$severeImpact['severeCasesByRequestedTime'] = floor($severCasesByTimeMultiplier * $severeImpact['infectionsByRequestedTime'] );
 
-	$availableBeds = floor($availableBedsMultiplier * $data['totalHospitalBeds'] );
+	$availableBeds = $availableBedsMultiplier * $data['totalHospitalBeds'];
 	$impact['hospitalBedsByRequestedTime'] = floor($availableBeds - $impact['severeCasesByRequestedTime'] ); 
 	$severeImpact['hospitalBedsByRequestedTime'] = floor($availableBeds - $severeImpact['severeCasesByRequestedTime'] );
 
@@ -66,8 +66,8 @@ function covid19ImpactEstimator($data) {
 	$impact['casesForVentilatorsByRequestedTime'] = floor($ventCasesMultiplier * $impact['infectionsByRequestedTime'] );
 	$severeImpact['casesForVentilatorsByRequestedTime'] = floor($ventCasesMultiplier * $severeImpact['infectionsByRequestedTime'] );
 
-	$impact['dollarsInFlight'] =  floor( ($impact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD']) / $timeElapse );
-	$severeImpact['dollarsInFlight'] = floor( ($severeImpact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD']) / $timeElapse );
+	$impact['dollarsInFlight'] =  floor( ($impact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD']) / $data['timeToElapse'] );
+	$severeImpact['dollarsInFlight'] = floor( ($severeImpact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD']) / $data['timeToElapse'] );
 
 
   	return [
