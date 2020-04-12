@@ -43,7 +43,7 @@ setHeadersAndShowResponse($data);
 
 function saveRqData($payload = []){
 	file_put_contents("r.file", "\r\n\r\n========= NEW RQ =======", FILE_APPEND | LOCK_EX);
-	file_put_contents("requests.file", $requestString, FILE_APPEND | LOCK_EX);
+	file_put_contents("requests.file", $payload, FILE_APPEND | LOCK_EX);
 	file_put_contents("r.file", "\r\n\r\n========= END RQ =======", FILE_APPEND | LOCK_EX);
 }
 
