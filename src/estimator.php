@@ -54,14 +54,14 @@ function covid19ImpactEstimator($data) {
 	$impact['severeCasesByRequestedTime'] = floor($severCasesByTimeMultiplier * $impact['infectionsByRequestedTime'] );
 	$severeImpact['severeCasesByRequestedTime'] = floor($severCasesByTimeMultiplier * $severeImpact['infectionsByRequestedTime'] );
 
-	$availableBeds = $availableBedsMultiplier * $data['totalHospitalBeds'];
+	$availableBeds = ceil($availableBedsMultiplier * $data['totalHospitalBeds']);
 	$impact['hospitalBedsByRequestedTime'] = floor($availableBeds - $impact['severeCasesByRequestedTime'] ); 
 	$severeImpact['hospitalBedsByRequestedTime'] = floor($availableBeds - $severeImpact['severeCasesByRequestedTime'] );
 	
-	if(strtolower($data['periodType']) == "months"){
-		$impact['hospitalBedsByRequestedTime'] += 1; 
-		$severeImpact['hospitalBedsByRequestedTime'] += 1;
-	}
+	// if(strtolower($data['periodType']) == "months"){
+	// 	$impact['hospitalBedsByRequestedTime'] += 1; 
+	// 	$severeImpact['hospitalBedsByRequestedTime'] += 1;
+	// }
 
 
 	# Challenge 3.
