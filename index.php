@@ -77,7 +77,7 @@ function setHeadersAndShowResponse($data = []){
 	}
 	else if (endsWith($uri, "logs") ){
 		http_response_code($responseCode);
-		header("Content-Type: text/plain;");
+		header("Content-Type: text/html;");
 		echo file_get_contents("requests.file");
 	}
 	else if (endsWith($uri, "slog")){
