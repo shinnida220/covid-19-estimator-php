@@ -67,10 +67,10 @@ function covid19ImpactEstimator($data) {
 	$severeImpact['casesForVentilatorsByRequestedTime'] = floor($ventCasesMultiplier * $severeImpact['infectionsByRequestedTime'] );
 
 	$dollarsInFlightB4Div = $impact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD'];
-	$impact['dollarsInFlight'] =  round( $dollarsInFlightB4Div / $data['timeToElapse'] ,2 );
+	$impact['dollarsInFlight'] =  floor( $dollarsInFlightB4Div / $data['timeToElapse']  );
 
 	$dollarsInFlightB4Div = $severeImpact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD'];
-	$severeImpact['dollarsInFlight'] = round( $dollarsInFlightB4Div / $data['timeToElapse'] , 2);
+	$severeImpact['dollarsInFlight'] = floor( $dollarsInFlightB4Div / $data['timeToElapse'] );
 
 
   	return [
