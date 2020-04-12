@@ -67,40 +67,69 @@ function setHeadersAndShowResponse($data = []){
 	$data['responseCode'] = $responseCode;
 
 	// Proceed to set the necessary headers..
-	switch($uri){
-		case '/xml':
-		case '/api/v1/on-covid-19/xml':
-			http_response_code($responseCode);
-			header ("Content-Type: application/xml");
-			echo ArrayToXml::convert($data, 'root');
-		break;
-		case '/logs':
-		case '/api/v1/on-covid-19/logs':
-			http_response_code($responseCode);
-			header("Content-Type: text/plain;");
-			echo file_get_contents("requests.file");
-		break;
-		case '/slog':
-		case '/api/v1/on-covid-19/slog':
-			http_response_code($responseCode);
-			header("Content-Type: text/plain");
-			echo file_get_contents("r.file");
-		break;
-		case '/json':
-		case '/':
-		case '/api/v1/on-covid-19':
-		case '/api/v1/on-covid-19/json':
-		// 	http_response_code($responseCode);
-		// 	header('Content-Type: application/json; charset=utf-8');
-		// 	echo json_encode($data);
-		// break;
-		default:
-			http_response_code($responseCode);
-			header('Content-Type: application/json; charset=utf-8');
-			echo json_encode($data);
+	if ( endsWith($uri, "xml") ){
+		http_response_code($responseCode);
+		header ("Content-Type: application/xml");
+		echo ArrayToXml::convert($data, 'root');
 	}
+	else if (endsWith($uri, "logs") ){
+		http_response_code($responseCode);
+		header("Content-Type: text/plain;");
+		echo file_get_contents("requests.file");
+	}
+	else if (endsWith($uri, "slog")){
+		http_response_code($responseCode);
+		header("Content-Type: text/plain");
+		echo file_get_contents("r.file");
+	}
+	else{
+		http_response_code($responseCode);
+		header('Content-Type: application/json; charset=utf-8');
+		echo json_encode($data);
+	}
+	// switch($uri){
+	// 	case '/xml':
+	// 	case '/api/v1/on-covid-19/xml':
+	// 		http_response_code($responseCode);
+	// 		header ("Content-Type: application/xml");
+	// 		echo ArrayToXml::convert($data, 'root');
+	// 	break;
+	// 	case '/logs':
+	// 	case '/api/v1/on-covid-19/logs':
+	// 		http_response_code($responseCode);
+	// 		header("Content-Type: text/plain;");
+	// 		echo file_get_contents("requests.file");
+	// 	break;
+	// 	case '/slog':
+	// 	case '/api/v1/on-covid-19/slog':
+	// 		http_response_code($responseCode);
+	// 		header("Content-Type: text/plain");
+	// 		echo file_get_contents("r.file");
+	// 	break;
+	// 	case '/json':
+	// 	case '/':
+	// 	case '/api/v1/on-covid-19':
+	// 	case '/api/v1/on-covid-19/json':
+	// 	// 	http_response_code($responseCode);
+	// 	// 	header('Content-Type: application/json; charset=utf-8');
+	// 	// 	echo json_encode($data);
+	// 	// break;
+	// 	default:
+	// 		http_response_code($responseCode);
+	// 		header('Content-Type: application/json; charset=utf-8');
+	// 		echo json_encode($data);
+	// }
 }
 
+// https://stackoverflow.com/a/834355/380138
+function endsWith($haystack, $needle) {
+    $length = strlen($needle);
+    if ($length == 0) {
+        return true;
+    }
+
+    return (substr($haystack, -$length) === $needle);
+}
 
 function debug($array = []){
 	print("<pre>".print_r($array,true)."</pre>");
