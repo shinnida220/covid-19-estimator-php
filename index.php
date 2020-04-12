@@ -23,7 +23,7 @@ $responseCode = (in_array($uri, [
 ])) ? 200 : 404;
 
 $data = ['status' => 'NOT FOUND 404', 'code' => 404];
-if ($responseCode == 200) {
+if ($_SERVER['REQUEST_METHOD'] == "POST" && in_array($uri, ['/', '/json', '/xml'])) {
 
 	// Read the input stream
 	$body = file_get_contents("php://input");
@@ -34,6 +34,7 @@ if ($responseCode == 200) {
 	// Send the object for processing...
 	$data = covid19ImpactEstimator($object);
 }
+
 
 $eta += hrtime(true);
 $eta = floor($eta/1e+6);
@@ -76,7 +77,7 @@ function setHeadersAndShowResponse($data = []){
 		case '/logs':
 		case '/api/v1/on-covid-19/logs':
 			http_response_code($responseCode);
-			header("Content-Type: text/plain");
+			header("Content-Type: text/plain;");
 			echo file_get_contents("requests.file");
 		break;
 		case '/slog':
