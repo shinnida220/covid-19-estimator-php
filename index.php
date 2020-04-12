@@ -15,7 +15,8 @@ $responseCode = (in_array($uri, [
 	'/api/v1/on-covid-19/xml',
 	'/api/v1/on-covid-19/logs',
 	'/api/v1/on-covid-19',
-	'/api/v1/on-covid-19/json'
+	'/api/v1/on-covid-19/json',
+	'/api/v1/on-covid-19/slog'
 
 ])) ? 200 : 404;
 
@@ -26,6 +27,8 @@ if ($responseCode == 200) {
 	$body = file_get_contents("php://input");
 	// Decode the JSON object
 	$object = json_decode($body, true);
+	// Save so we can see..
+	saveRqData($object);
 	// Send the object for processing...
 	$data = covid19ImpactEstimator($object);
 }
@@ -38,6 +41,11 @@ logOperation($responseCode);
 // Set headers and show response..
 setHeadersAndShowResponse($data);
 
+function saveRqData($payload = []){
+	file_put_contents("r.file", "\r\n\r\n========= NEW RQ =======", FILE_APPEND | LOCK_EX);
+	file_put_contents("requests.file", $requestString, FILE_APPEND | LOCK_EX);
+	file_put_contents("r.file", "\r\n\r\n========= END RQ =======", FILE_APPEND | LOCK_EX);
+}
 
 function logOperation(){
 	global $eta;
@@ -64,6 +72,11 @@ function setHeadersAndShowResponse($data = []){
 			http_response_code($responseCode);
 			header("Content-Type: text/plain");
 			echo file_get_contents("requests.file");
+		break;
+		case '/api/v1/on-covid-19/slog':
+			http_response_code($responseCode);
+			header("Content-Type: text/plain");
+			echo file_get_contents("r.file");
 		break;
 		case '/api/v1/on-covid-19':
 		case '/api/v1/on-covid-19/json':
