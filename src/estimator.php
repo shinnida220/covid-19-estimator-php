@@ -25,19 +25,20 @@ function covid19ImpactEstimator($data) {
 	$ventCasesMultiplier = 0.02;
 
 	$timeElapse = 0;
+	$actualDays = $data['timeToElapse'];
 	switch (strtolower($data['periodType'])){
-		case 'days':
-			$timeElapse = floor($data['timeToElapse']/3);
-		break;
 		case 'weeks':
-			$timeElapse = floor( ($data['timeToElapse'] * 7) /3 );
+			$actualDays = $data['timeToElapse'] * 7;
 		break;
 		case 'months':
-			$timeElapse = floor ( ($data['timeToElapse'] * 30) /3 );
+			$actualDays = $data['timeToElapse'] * 30;
 		break;
+		case 'days':
 		default:
-			$timeElapse = floor ($data['timeToElapse']/3);
+			$actualDays = $data['timeToElapse'];
 	}
+
+	$timeElapse = floor ($actualDays/3);
 
 	# Challenge 1.
 	$impact = [];
@@ -72,10 +73,10 @@ function covid19ImpactEstimator($data) {
 	$severeImpact['casesForVentilatorsByRequestedTime'] = floor($ventCasesMultiplier * $severeImpact['infectionsByRequestedTime'] );
 
 	$dollarsInFlightB4Div = $impact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD'];
-	$impact['dollarsInFlight'] =  floor( $dollarsInFlightB4Div / $data['timeToElapse']  );
+	$impact['dollarsInFlight'] =  floor( $dollarsInFlightB4Div / $actualDays  );
 
 	$dollarsInFlightB4Div = $severeImpact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD'];
-	$severeImpact['dollarsInFlight'] = floor( $dollarsInFlightB4Div / $data['timeToElapse'] );
+	$severeImpact['dollarsInFlight'] = floor( $dollarsInFlightB4Div / $actualDays );
 
 
   	return [
