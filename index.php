@@ -18,19 +18,13 @@ $responseCode = (in_array($uri, [
 
 $data = ['status' => 'NOT FOUND 404', 'code' => 404];
 if ($responseCode == 200) {
-	$data = covid19ImpactEstimator([
-		'region' => [
-			'name' => "Africa",
-			'avgAge' => 19.7,
-			'avgDailyIncomeInUSD' => 5,
-			'avgDailyIncomePopulation' => 0.71
-		],
-		'periodType' => "days",
-		'timeToElapse' => 58,
-		'reportedCases' => 674,
-		'population' => 66622705,
-		'totalHospitalBeds' => 1380614
-	]);
+
+	// Read the input stream
+	$body = file_get_contents("php://input");
+	// Decode the JSON object
+	$object = json_decode($body, true);
+	// Send the object for processing...
+	$data = covid19ImpactEstimator($object);
 }
 
 $eta += hrtime(true);
