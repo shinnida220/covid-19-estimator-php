@@ -58,7 +58,7 @@ function logOperation(){
 	global $responseCode;
 
 	$eta = (strlen($eta) < 2) ? "0{$eta}" : $eta;
-	$requestString = $_SERVER['REQUEST_METHOD'] ."\t" . $_SERVER['REQUEST_URI'] ."\t". $responseCode. "\t".$eta."ms\r\n";
+	$requestString = $_SERVER['REQUEST_METHOD'] ."\t" . $_SERVER['REQUEST_URI'] ."\t". $responseCode. "\t".$eta."ms\n";
 	file_put_contents("requests.file", $requestString, FILE_APPEND | LOCK_EX);
 }
 
