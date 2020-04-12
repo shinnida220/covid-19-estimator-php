@@ -11,19 +11,22 @@ $eta = -hrtime(true);
 // Remove trailing slashe
 // $uri = rtrim($_SERVER['REQUEST_URI'], '/');
 $uri = $_SERVER['REQUEST_URI'];
+$responseCode = 200;
 
-$responseCode = (in_array($uri, [
-	'/xml', '/logs', '/slog', 'json', '/',
-	'/api/v1/on-covid-19/xml',
-	'/api/v1/on-covid-19/logs',
-	'/api/v1/on-covid-19',
-	'/api/v1/on-covid-19/json',
-	'/api/v1/on-covid-19/slog'
+// $responseCode = (in_array($uri, [
+// 	'/xml', '/logs', '/slog', 'json', '/',
+// 	'/api/v1/on-covid-19/xml',
+// 	'/api/v1/on-covid-19/logs',
+// 	'/api/v1/on-covid-19',
+// 	'/api/v1/on-covid-19/json',
+// 	'/api/v1/on-covid-19/slog'
 
-])) ? 200 : 404;
+// ])) ? 200 : 404;
 
 $data = ['status' => 'NOT FOUND 404', 'code' => 404];
-if ($_SERVER['REQUEST_METHOD'] == "POST" && in_array($uri, ['/', '/json', '/xml'])) {
+if ($_SERVER['REQUEST_METHOD'] == "POST" &&  
+		( endsWith($uri, "json") || endsWith($uri, "xml") || endsWith($uri, "/") || $uri == "/" ) 
+	) {
 
 	// Read the input stream
 	$body = file_get_contents("php://input");
