@@ -24,6 +24,21 @@ function covid19ImpactEstimator($data) {
 	$icuCasesMultiplier = 0.05;
 	$ventCasesMultiplier = 0.02;
 
+	$timeElapse = 0;
+	switch (strtolower($data['periodType'])){
+		case 'days':
+			$timeElapse = $data['timeToElapse'];
+		break;
+		case 'weeks':
+			$timeElapse = $data['timeToElapse'] * 7;
+		break;
+		case 'months':
+			$timeElapse = $data['timeToElapse'] * 30;
+		break;
+		default:
+			$timeElapse = $data['timeToElapse'];
+	}
+
 	# Challenge 1.
 	$impact = [];
 	$severeImpact = [];
@@ -31,8 +46,8 @@ function covid19ImpactEstimator($data) {
 	$impact['currentlyInfected'] = floor($data['reportedCases'] * $reportedCasesMultiplier);
 	$severeImpact['currentlyInfected'] = floor($impact['currentlyInfected'] * $severeCasesMultiplier );	
 
-	$impact['infectionsByRequestedTime'] = floor($impact['currentlyInfected'] * (2 ** ($data['timeToElapse']/3) ) );
-	$severeImpact['infectionsByRequestedTime'] = floor($severeImpact['currentlyInfected'] * (2 ** ($data['timeToElapse']/3) ) );
+	$impact['infectionsByRequestedTime'] = floor($impact['currentlyInfected'] * (2 ** ($timeElapse/3) ) );
+	$severeImpact['infectionsByRequestedTime'] = floor($severeImpact['currentlyInfected'] * (2 ** ($timeElapse/3) ) );
 
 
 	# Challenge 2.
@@ -51,8 +66,8 @@ function covid19ImpactEstimator($data) {
 	$impact['casesForVentilatorsByRequestedTime'] = floor($ventCasesMultiplier * $impact['infectionsByRequestedTime'] );
 	$severeImpact['casesForVentilatorsByRequestedTime'] = floor($ventCasesMultiplier * $severeImpact['infectionsByRequestedTime'] );
 
-	$impact['dollarsInFlight'] =  floor( ($impact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD']) / $data['timeToElapse'] );
-	$severeImpact['dollarsInFlight'] = floor( ($severeImpact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD']) / $data['timeToElapse'] );
+	$impact['dollarsInFlight'] =  floor( ($impact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD']) / $timeElapse );
+	$severeImpact['dollarsInFlight'] = floor( ($severeImpact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD']) / $timeElapse );
 
 
   	return [
