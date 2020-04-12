@@ -1,17 +1,17 @@
 <?php
 /**
 	{
-		region: {
-			name: "Africa",
-			avgAge: 19.7,
-			avgDailyIncomeInUSD: 5,
-			avgDailyIncomePopulation: 0.71
+		"region" : {
+			"name": "Africa",
+			"avgAge": 19.7,
+			"avgDailyIncomeInUSD": 4,
+			"avgDailyIncomePopulation": 0.73
 		},
-		periodType: "days",
-		timeToElapse: 58,
-		reportedCases: 674,
-		population: 66622705,
-		totalHospitalBeds: 1380614
+		"periodType": "days",
+		"timeToElapse": 38,
+		"reportedCases": 2747,
+		"population": 92931687,
+		"totalHospitalBeds": 678874
 	}
 */
 
@@ -66,8 +66,11 @@ function covid19ImpactEstimator($data) {
 	$impact['casesForVentilatorsByRequestedTime'] = floor($ventCasesMultiplier * $impact['infectionsByRequestedTime'] );
 	$severeImpact['casesForVentilatorsByRequestedTime'] = floor($ventCasesMultiplier * $severeImpact['infectionsByRequestedTime'] );
 
-	$impact['dollarsInFlight'] =  floor( ($impact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD']) / $data['timeToElapse'] );
-	$severeImpact['dollarsInFlight'] = floor( ($severeImpact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD']) / $data['timeToElapse'] );
+	$dollarsInFlightB4Div = $impact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD'];
+	$impact['dollarsInFlight'] =  round( $dollarsInFlightB4Div * $data['timeToElapse'] ,2 );
+
+	$dollarsInFlightB4Div = $severeImpact['infectionsByRequestedTime'] * $data['region']['avgDailyIncomePopulation'] * $data['region']['avgDailyIncomeInUSD'];
+	$severeImpact['dollarsInFlight'] = round( $dollarsInFlightB4Div * $data['timeToElapse'] , 2);
 
 
   	return [
