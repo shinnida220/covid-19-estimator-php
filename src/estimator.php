@@ -43,8 +43,8 @@ function covid19ImpactEstimator($data) {
 	$impact = [];
 	$severeImpact = [];
 
-	$impact['currentlyInfected'] = floor($data['reportedCases'] * $reportedCasesMultiplier);
-	$severeImpact['currentlyInfected'] = floor($impact['currentlyInfected'] * $severeCasesMultiplier );	
+	$impact['currentlyInfected'] = floor($data['reportedCases'] * 10);
+	$severeImpact['currentlyInfected'] = floor($impact['currentlyInfected'] * 50 );	
 
 	$impact['infectionsByRequestedTime'] = floor($impact['currentlyInfected'] * (2 ** ($timeElapse/3) ) );
 	$severeImpact['infectionsByRequestedTime'] = floor($severeImpact['currentlyInfected'] * (2 ** ($timeElapse/3) ) );
